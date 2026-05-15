@@ -45,7 +45,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
           <div className="flex items-center">
             <Link to="/">
-              <img src="http://jinjaproducts.com.ng/images1/jinjalogo.png" alt="Jinja Logo" className="h-10 md:h-12 w-auto" />
+              <img src="/images/jinjalogo.png" alt="Jinja Logo" className="h-10 md:h-12 w-auto" />
             </Link>
           </div>
           
@@ -91,7 +91,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
             <div className="col-span-1 lg:col-span-1">
               <div className="flex items-center mb-6">
-                <img src="http://jinjaproducts.com.ng/images1/jinjalogo.png" alt="Jinja Logo" className="h-10 w-auto" />
+                <img src="/images/jinjalogo.png" alt="Jinja Logo" className="h-10 w-auto" />
               </div>
               <p className="text-gray-400 text-sm mb-6 leading-relaxed">
                 Bringing nature’s wisdom to your daily wellness routine since 2020. We believe in the power of plants to heal and restore.
