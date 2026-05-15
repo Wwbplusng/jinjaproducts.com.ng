@@ -147,7 +147,7 @@ export const Blog: React.FC = () => {
             
             <div className="bg-herb-bg border-2 border-dashed border-herb-secondary/30 rounded-[2rem] p-10 text-center flex flex-col items-center">
               <div className="bg-white p-4 rounded-3xl shadow-lg mb-6 border border-herb-secondary/20">
-                <img src="http://jinjaproducts.com.ng/images1/iru.png" alt="IRU Soap" className="w-24 h-auto mix-blend-multiply" />
+                <img src="/images/iru.png" alt="IRU Soap" className="w-24 h-auto mix-blend-multiply" />
               </div>
               <h4 className="font-display font-bold text-herb-primary mb-2">Clean Skin Naturally</h4>
               <p className="text-xs text-gray-500 mb-6 font-medium">Try our Antiseptic Herbal Soap for glowing, healthy skin.</p>
@@ -164,12 +164,12 @@ export const Blog: React.FC = () => {
               <h4 className="text-lg font-display font-bold text-gray-900 border-l-4 border-herb-primary pl-4">Discover Our Range</h4>
               <div className="flex flex-col gap-8">
                 {[
-                  { url: "http://jinjaproducts.com.ng/images1/chole.jpg", name: "Chole Health Support" },
-                  { url: "http://jinjaproducts.com.ng/images1/femmine.jpg", name: "Femmine Wellness" },
-                  { url: "http://jinjaproducts.com.ng/images1/pile.jpg", name: "Pile Relief Formula" },
-                  { url: "http://jinjaproducts.com.ng/images1/sex.jpg", name: "Vitality Booster" },
-                  { url: "http://jinjaproducts.com.ng/images1/sugar.jpg", name: "Sugar Balance" },
-                  { url: "http://jinjaproducts.com.ng/images1/vision.jpg", name: "Vision Support" }
+                  { url: "/images/chole.jpg", name: "Chole Health Support" },
+                  { url: "/images/femmine.jpg", name: "Femmine Wellness" },
+                  { url: "/images/pile.jpg", name: "Pile Relief Formula" },
+                  { url: "/images/sex.jpg", name: "Vitality Booster" },
+                  { url: "/images/sugar.jpg", name: "Sugar Balance" },
+                  { url: "/images/vision.jpg", name: "Vision Support" }
                 ].map((img, idx) => (
                   <motion.div 
                     key={idx}

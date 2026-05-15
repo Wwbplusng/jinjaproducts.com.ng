@@ -68,7 +68,7 @@ export const Products: React.FC = () => {
             >
               <div className="bg-[#f0f9f1] rounded-[3rem] p-8 md:p-12 relative overflow-hidden group">
                 <img 
-                  src="http://jinjaproducts.com.ng/images1/jinjabig750.png" 
+                  src="/images/jinjabig750.png" 
                   alt="Jinja Herbal Extract" 
                   className="w-full max-w-md mx-auto transform group-hover:scale-105 transition-transform duration-700 mix-blend-multiply" 
                 />
@@ -181,7 +181,7 @@ export const Products: React.FC = () => {
             >
               <div className="bg-[#fdfcf0] rounded-[3rem] p-8 md:p-12 relative overflow-hidden group border-2 border-herb-secondary/20">
                 <img 
-                  src="http://jinjaproducts.com.ng/images1/iru.png" 
+                  src="/images/iru.png" 
                   alt="IRU Antiseptic Herbal Soap" 
                   className="w-full max-w-sm mx-auto transform group-hover:scale-105 transition-transform duration-700 mix-blend-multiply" 
                 />
@@ -255,7 +255,7 @@ export const Products: React.FC = () => {
             <div className="bg-white rounded-[3rem] p-4 shadow-2xl border border-gray-100 overflow-hidden relative group">
               <div className="absolute inset-0 bg-herb-primary/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
               <img 
-                src="http://jinjaproducts.com.ng/images1/testimny.jpg" 
+                src="/images/testimny.jpg" 
                 alt="Product Testimonies" 
                 className="w-full h-auto rounded-[2.5rem] shadow-sm transform transition-transform duration-700 group-hover:scale-[1.02]" 
               />

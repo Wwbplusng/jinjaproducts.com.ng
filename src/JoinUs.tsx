@@ -143,7 +143,7 @@ export const JoinUs: React.FC = () => {
             <div className="bg-white rounded-[4rem] p-6 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.15)] border border-gray-100 overflow-hidden relative group">
               <div className="absolute inset-0 bg-herb-primary/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
               <img 
-                src="http://jinjaproducts.com.ng/images1/rank.jpeg" 
+                src="/images/rank.jpeg" 
                 alt="Multistream Rank Rewards" 
                 className="w-full h-auto rounded-[3.5rem] shadow-sm transform transition-transform duration-1000 group-hover:scale-[1.03]" 
               />

@@ -27,7 +27,7 @@ export const Home: React.FC = () => {
             transition={{ duration: 1, ease: "easeOut" }}
             className="h-full w-full"
             style={{ 
-              backgroundImage: 'url("http://jinjaproducts.com.ng/images1/topbg.png")',
+              backgroundImage: 'url("/images/topbg.png")',
               backgroundSize: 'contain',
               backgroundPosition: 'center bottom',
               backgroundRepeat: 'no-repeat',

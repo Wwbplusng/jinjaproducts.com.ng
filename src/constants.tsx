@@ -34,7 +34,7 @@ export const PRODUCTS: Product[] = [
     name: 'Jinja Herbal Extract (Big)',
     price: 14500,
     description: "JINJA Herbal Extracts are formulated with powerful bioactive compounds derived from 100% natural herbs, scientifically known for their antiviral properties. These plant-based extracts work by inhibiting viral replication, preventing the virus from multiplying and spreading within the body. Additionally, they help to strengthen the body's immune response, allowing your natural defense system to combat infections more effectively.",
-    image: 'http://jinjaproducts.com.ng/images1/jinjabig750.png',
+    image: '/images/jinjabig750.png',
     color: 'bg-[#e8f5e9]',
     rating: 4.8,
     reviews: 156
@@ -44,7 +44,7 @@ export const PRODUCTS: Product[] = [
     name: 'Jinja Herbal Extract (Small)',
     price: 8500,
     description: "JINJA Herbal Extracts are formulated with powerful bioactive compounds derived from 100% natural herbs, scientifically known for their antiviral properties. These plant-based extracts work by inhibiting viral replication, preventing the virus from multiplying and spreading within the body. Additionally, they help to strengthen the body's immune response, allowing your natural defense system to combat infections more effectively.",
-    image: 'http://jinjaproducts.com.ng/images1/jinjasmall350.png',
+    image: '/images/jinjasmall350.png',
     color: 'bg-[#e0f7fa]',
     rating: 4.7,
     reviews: 215
@@ -54,7 +54,7 @@ export const PRODUCTS: Product[] = [
     name: 'IRU Antiseptic Herbal Soap',
     price: 12500,
     description: "A premium natural skincare solution designed to maintain healthy and clean skin. Formulated with natural ingredients, this herbal soap serves as an excellent alternative to chemical-based soaps that can be harsh on the skin.",
-    image: 'http://jinjaproducts.com.ng/images1/iru.png',
+    image: '/images/iru.png',
     color: 'bg-[#f5f5dc]',
     rating: 4.9,
     reviews: 92
@@ -64,7 +64,7 @@ export const PRODUCTS: Product[] = [
     name: 'Jinja Herbal Extract (Big - 20 bottles)',
     price: 275000,
     description: "Boost Your Immunity with JINJA Herbal Extracts – Natural Defense Against Viral Infections and Diseases (Antibiotic, Antiviral, Antifungal, and Ant parasitic Body Refresh!)",
-    image: 'http://jinjaproducts.com.ng/images1/jinjabigcartoon.png',
+    image: '/images/jinjabigcartoon.png',
     color: 'bg-[#e8f5e9]',
     rating: 4.8,
     reviews: 45
@@ -74,7 +74,7 @@ export const PRODUCTS: Product[] = [
     name: 'Jinja Herbal Extract (Small - 20 bottles)',
     price: 145000,
     description: "Boost Your Immunity with JINJA Herbal Extracts – Natural Defense Against Viral Infections and Diseases (Antibiotic, Antiviral, Antifungal, and Ant parasitic Body Refresh!)",
-    image: 'http://jinjaproducts.com.ng/images1/jinjasmallcarton.png',
+    image: '/images/jinjasmallcarton.png',
     color: 'bg-[#e0f7fa]',
     rating: 4.7,
     reviews: 38
@@ -114,7 +114,7 @@ export const BLOG_POSTS: BlogPost[] = [
   {
     id: 'jinja-herbal-extract-guide',
     title: 'Jinja Herbal Extract: A Holistic Approach to Modern Wellness',
-    image: 'http://jinjaproducts.com.ng/images1/jinjabig750.png',
+    image: '/images/jinjabig750.png',
     date: 'May 14, 2024',
     category: 'Wellness Guide',
     author: 'Jinja Health Team',
@@ -171,7 +171,7 @@ export const BLOG_POSTS: BlogPost[] = [
   {
     id: 'detoxing-naturally-guide',
     title: 'Detoxing Naturally: A Guide with Jinja Herbal Extract',
-    image: 'http://jinjaproducts.com.ng/images1/jinjabig750.png',
+    image: 'http:/images/jinjabig750.png',
     date: 'May 10, 2024',
     category: 'Detox Tips',
     author: 'Wellness Expert',
@@ -199,7 +199,7 @@ export const BLOG_POSTS: BlogPost[] = [
   {
     id: 'immune-support-secrets',
     title: 'Immune Support Secrets with Jinja Herbal Extract',
-    image: 'http://jinjaproducts.com.ng/images1/jinjabig750.png',
+    image: '/images/jinjabig750.png',
     date: 'Apr 28, 2024',
     category: 'Immune Health',
     author: 'Nutritional Specialist',
@@ -223,7 +223,7 @@ export const BLOG_POSTS: BlogPost[] = [
   {
     id: 'antiseptic-herbs-power',
     title: 'The Power of Antiseptic Herbs in IRU Antiseptic Soap',
-    image: 'http://jinjaproducts.com.ng/images1/iru.png',
+    image: '/images/iru.png',
     date: 'Apr 15, 2024',
     category: 'Herbal Science',
     author: 'Traditional Healer',
