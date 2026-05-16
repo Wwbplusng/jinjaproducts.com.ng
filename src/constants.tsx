@@ -64,7 +64,7 @@ export const PRODUCTS: Product[] = [
     name: 'Jinja Herbal Extract (Big - 20 bottles)',
     price: 275000,
     description: "Boost Your Immunity with JINJA Herbal Extracts – Natural Defense Against Viral Infections and Diseases (Antibiotic, Antiviral, Antifungal, and Ant parasitic Body Refresh!)",
-    image: 'http://desirebrand.com/images1/jinjabigcarton.png',
+    image: 'http://desirebrand.com/images1/jinjabigcartoon.png',
     color: 'bg-[#e8f5e9]',
     rating: 4.8,
     reviews: 45
