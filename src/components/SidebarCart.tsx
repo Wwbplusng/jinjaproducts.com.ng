@@ -59,33 +59,39 @@ export const SidebarCart: React.FC = () => {
         }
       );
       
-      if (response.data.access_code) {
-        const nameParts = trimmedName.split(' ');
-        const firstname = nameParts[0] || trimmedName;
-        const lastname = nameParts.slice(1).join(' ') || "";
+      const reference = response.data.reference;
+      const nameParts = trimmedName.split(' ');
+      const firstname = nameParts[0] || trimmedName;
+      const lastname = nameParts.slice(1).join(' ') || "";
 
-        const handler = (window as any).PaystackPop.setup({
-          key: PAYSTACK_PUBLIC_KEY,
-          email: trimmedEmail,
-          amount: finalTotal * 100,
-          firstname,
-          lastname,
-          metadata: {
-            custom_fields: [
-              { display_name: "Customer Name", variable_name: "customer_name", value: trimmedName },
-              { display_name: "Email Address", variable_name: "customer_email", value: trimmedEmail }
-            ]
-          },
-          access_code: response.data.access_code,
-          onClose: () => setIsSubmitting(false),
-          callback: (resp: any) => {
-            window.location.href = `${window.location.pathname}?reference=${resp.reference}`;
-          }
-        });
-        handler.openIframe();
-      } else if (response.data.authorization_url) {
-        window.location.href = response.data.authorization_url;
+      const paystackConfig: any = {
+        key: PAYSTACK_PUBLIC_KEY,
+        email: trimmedEmail,
+        amount: Math.round(finalTotal * 100),
+        firstname,
+        lastname,
+        ref: reference,
+        metadata: {
+          custom_fields: [
+            { display_name: "Customer Name", variable_name: "customer_name", value: trimmedName },
+            { display_name: "Email Address", variable_name: "customer_email", value: trimmedEmail },
+            { display_name: "Phone Number", variable_name: "customer_phone", value: checkoutData.phone },
+            { display_name: "Delivery Address", variable_name: "customer_address", value: checkoutData.address }
+          ]
+        },
+        onClose: () => setIsSubmitting(false),
+        callback: (resp: any) => {
+          window.location.href = `${window.location.pathname}?reference=${resp.reference}`;
+        }
+      };
+
+      // Use access_code if returned by backend, otherwise it uses the params above
+      if (response.data.access_code) {
+        paystackConfig.access_code = response.data.access_code;
       }
+
+      const handler = (window as any).PaystackPop.setup(paystackConfig);
+      handler.openIframe();
     } catch (error: any) {
       alert("Payment failed: " + error.message);
       setIsSubmitting(false);
