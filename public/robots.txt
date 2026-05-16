@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://jinjaproducts.com.ng/sitemap.xml
