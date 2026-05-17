@@ -53,6 +53,11 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
       return;
     }
 
+    if (!PAYSTACK_PUBLIC_KEY || PAYSTACK_PUBLIC_KEY === 'undefined' || PAYSTACK_PUBLIC_KEY.includes('YOUR_')) {
+      alert("Error: Paystack Public Key is missing or invalid. Please set the VITE_PAYSTACK_PUBLIC_KEY environment variable in your host settings (e.g. Netlify).");
+      return;
+    }
+
     setIsSubmitting(true);
     const shippingFee = (SHIPPING_OPTIONS as any)[checkoutData.shipping].fee;
     const finalTotal = totalPrice + shippingFee;
@@ -65,7 +70,9 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
           name: trimmedName, 
           phone: trimmedPhone, 
           address: trimmedAddress,
-          items: cart.map(item => ({ id: item.id, name: item.name, quantity: item.quantity }))
+          items: cart.map(item => ({ id: item.id, name: item.name, quantity: item.quantity })),
+          total: finalTotal,
+          shipping: (SHIPPING_OPTIONS as any)[checkoutData.shipping].label
         }
       );
       
@@ -243,7 +250,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
                   </p>
                   <div className="space-y-4 max-h-56 overflow-y-auto mb-4 pr-1">
                     {cart.map((item) => (
-                      <div key={item.id} className="flex justify-between items-center text-sm border-b border-gray-100 pb-3 last:border-0 last:pb-0">
+                      <div key={`modal-checkout-${item.id}`} className="flex justify-between items-center text-sm border-b border-gray-100 pb-3 last:border-0 last:pb-0">
                         <div className="flex gap-3 items-center">
                           <span className="text-gray-700 font-medium truncate max-w-[120px]">{item.quantity}x {item.name}</span>
                         </div>
@@ -308,6 +315,13 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
                         ))}
                       </select>
                     </div>
+                    {checkoutData.shipping === 'pod' && (
+                      <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl">
+                        <p className="text-[10px] text-amber-800 font-bold flex items-center gap-2 uppercase tracking-tight">
+                          <Truck className="w-3 h-3" /> Note: Shipping/Transport Fee will be paid on delivery
+                        </p>
+                      </div>
+                    )}
                   </div>
 
                   <button 

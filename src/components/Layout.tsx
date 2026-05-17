@@ -20,6 +20,34 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
           setIsVerifying(true);
           const result = await verifyPayment(reference);
           if (result.status && result.data.status === 'success') {
+            const orderDataRaw = localStorage.getItem(`order_info_${reference}`);
+            if (orderDataRaw) {
+              try {
+                const orderData = JSON.parse(orderDataRaw);
+                const itemsText = orderData.items.map((item: any) => `- ${item.quantity}x ${item.name}`).join('\n');
+                const whatsappMessage = encodeURIComponent(
+                  `🛍️ *NEW ORDER CONFIRMATION*\n\n` +
+                  `*Customer Details:*\n` +
+                  `👤 Name: ${orderData.name}\n` +
+                  `📞 Phone: ${orderData.phone}\n` +
+                  `📍 Address: ${orderData.address}\n\n` +
+                  `*Order Summary:*\n` +
+                  `${itemsText}\n` +
+                  `🚚 Shipping: ${orderData.shipping}\n` +
+                  `💰 *Total: ₦${orderData.total.toLocaleString()}*\n\n` +
+                  `✅ *Payment Confirmed*\n` +
+                  `💳 Ref: ${reference}\n\n` +
+                  `Please process this order quickly. Thank you!`
+                );
+                
+                // Open WhatsApp in a new tab (this acts as the background send from browser)
+                window.open(`https://wa.me/2348028418499?text=${whatsappMessage}`, '_blank');
+                localStorage.removeItem(`order_info_${reference}`);
+              } catch (e) {
+                console.error("Failed to parse order data for WhatsApp", e);
+              }
+            }
+            
             alert(`Payment Successful! Reference: ${reference}. We will process your order immediately.`);
             clearCart();
           } else {

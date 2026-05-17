@@ -41,6 +41,11 @@ export const SidebarCart: React.FC = () => {
   };
 
   const handleFinalPayment = async () => {
+    if (!PAYSTACK_PUBLIC_KEY || PAYSTACK_PUBLIC_KEY === 'undefined' || PAYSTACK_PUBLIC_KEY.includes('YOUR_')) {
+      alert("Error: Paystack Public Key is missing or invalid. Please set the VITE_PAYSTACK_PUBLIC_KEY environment variable.");
+      return;
+    }
+
     setIsSubmitting(true);
     const trimmedEmail = checkoutData.email.trim();
     const trimmedName = checkoutData.name.trim();
@@ -55,7 +60,9 @@ export const SidebarCart: React.FC = () => {
           name: trimmedName, 
           phone: checkoutData.phone, 
           address: checkoutData.address,
-          items: cart.map(item => ({ id: item.id, name: item.name, quantity: item.quantity }))
+          items: cart.map(item => ({ id: item.id, name: item.name, quantity: item.quantity })),
+          total: finalTotal,
+          shipping: (SHIPPING_OPTIONS as any)[checkoutData.shipping].label
         }
       );
       
@@ -147,7 +154,7 @@ export const SidebarCart: React.FC = () => {
                 ) : (
                   <div className="space-y-6">
                     {cart.map((item) => (
-                      <div key={item.id} className="flex gap-4 group">
+                      <div key={`cart-${item.id}`} className="flex gap-4 group">
                         <div className={`w-20 h-20 rounded-2xl overflow-hidden flex-shrink-0 ${item.color}`}>
                           <img src={item.image} alt={item.name} className="w-full h-full object-cover mix-blend-multiply opacity-80" />
                         </div>
@@ -199,7 +206,7 @@ export const SidebarCart: React.FC = () => {
                     </h4>
                     <div className="space-y-3 mb-4 max-h-48 overflow-y-auto pr-2">
                       {cart.map((item) => (
-                        <div key={item.id} className="flex justify-between items-center text-sm border-b border-gray-100 pb-2 last:border-0 last:pb-0">
+                        <div key={`details-${item.id}`} className="flex justify-between items-center text-sm border-b border-gray-100 pb-2 last:border-0 last:pb-0">
                           <div className="flex gap-2 items-center">
                             <span className="font-bold text-herb-primary w-5">{item.quantity}x</span>
                             <span className="text-gray-700 truncate max-w-[150px]">{item.name}</span>
@@ -320,7 +327,7 @@ export const SidebarCart: React.FC = () => {
                          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Order Summary</p>
                          <div className="space-y-2">
                            {cart.map(item => (
-                             <div key={item.id} className="flex justify-between text-xs">
+                             <div key={`review-summary-${item.id}`} className="flex justify-between text-xs">
                                <span className="text-gray-600">{item.quantity}x {item.name}</span>
                                <span className="font-bold">₦{(item.price * item.quantity).toLocaleString()}</span>
                              </div>
