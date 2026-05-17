@@ -12,6 +12,9 @@ export async function initializePayment(email: string, amount: number, metadata:
   // Generate a client-side reference
   const reference = 'JS_' + Math.floor((Math.random() * 1000000000) + 1);
   
+  // Store metadata for background processes
+  localStorage.setItem(`order_info_${reference}`, JSON.stringify(metadata));
+
   // Return a response that indicates we are doing client-side initialization
   return {
     status: true,
