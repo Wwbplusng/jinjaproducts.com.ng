@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { Helmet } from 'react-helmet-async';
 import { CheckCircle2, ShieldCheck, Leaf, Sparkles, Droplets, Heart, ShoppingCart } from 'lucide-react';
-import { PRODUCTS } from './constants';
+import { PRODUCTS, HEALTH_DISCLAIMER, JINJA_WELLNESS_STORY } from './constants';
 import { useCart } from './context/CartContext';
 
 export const Products: React.FC = () => {
@@ -12,6 +12,7 @@ export const Products: React.FC = () => {
   const jinjaBig = PRODUCTS.find(p => p.id === '1');
   const jinjaSmall = PRODUCTS.find(p => p.id === '2');
   const iruSoap = PRODUCTS.find(p => p.id === '3');
+  const iruSoapSingle = PRODUCTS.find(p => p.id === '6');
 
   const jinjaBenefits = [
     "Natural Detoxifier", "Boost Immune System", "Rich in Antioxidants", 
@@ -34,11 +35,12 @@ export const Products: React.FC = () => {
   return (
     <div className="bg-white">
       <Helmet>
-        <title>Natural Herbal Products | Jinja Herbal & Iru Soap</title>
-        <meta name="description" content="Shop our full range of natural solutions. Jinja Herbal Extract for immune defense and IRU Antiseptic soap for healthy skin skincare. 100% organic ingredients." />
+        <title>Shop Original Jinja Herbal Products | Multistream Antiviral Supplements & Soap</title>
+        <meta name="description" content="Discover our complete range of Multistream products. Original Jinja Herbal Extract for antiviral defense and IRU Antiseptic soap for healthy skin. NAFDAC approved natural health remedies available for delivery in Nigeria." />
         <link rel="canonical" href="https://jinjaproducts.com.ng/products" />
-        <meta property="og:title" content="Our Natural Solutions | Jinja Herbal Products" />
-        <meta property="og:description" content="Explore our organic supplements and herbal soaps. Scientifically formulated for your wellness." />
+        <meta property="og:title" content="Verified Jinja Herbal & Iru Soap Products | Shop Official" />
+        <meta property="og:description" content="Official products catalog. Buy original Jinja Herbal Extract and Iru soap. Plant-based healing for immune support and skin health." />
+        <meta name="keywords" content="buy jinja herbal extract, original jinja drink price, iru soap benefits, multistream products nigeria, jinja herbal drink reviews, antiviral herbal supplement, original jinja herbal detox" />
       </Helmet>
       {/* Page Header */}
       <section className="bg-herb-primary py-16">
@@ -46,12 +48,12 @@ export const Products: React.FC = () => {
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-4xl md:text-5xl font-display font-bold text-white mb-4"
+            className="text-2xl md:text-4xl font-display font-bold text-white mb-6"
           >
-            Our Natural Solutions
+            Nature's <span className="text-herb-secondary">Potent Remedies</span>
           </motion.h1>
-          <p className="text-herb-secondary max-w-2xl mx-auto text-lg leading-relaxed">
-            Scientifically formulated with 100% natural herbs to restore your body's vital balance and strengthen your natural defenses.
+          <p className="text-herb-secondary max-w-3xl mx-auto text-xl leading-relaxed font-medium">
+            Discover our collection of premium, NAFDAC-approved herbal solutions. Each product is carefully crafted from the finest organic botanicals to support your body's natural healing processes and restore total wellness.
           </p>
         </div>
       </section>
@@ -81,9 +83,12 @@ export const Products: React.FC = () => {
             </motion.div>
 
             <div className="w-full lg:w-1/2">
-              <h2 className="text-3xl md:text-4xl font-display font-bold text-gray-900 mb-6 leading-tight">
+              <h2 className="text-3xl md:text-4xl font-display font-bold text-gray-900 mb-2 leading-tight">
                 Jinja Herbal Extract — <span className="text-herb-primary">Antiviral Immune Defense</span>
               </h2>
+              <div className="mb-6">
+                <span className="inline-block text-xs font-black text-herb-primary bg-herb-primary/10 px-3 py-1 rounded-full border border-herb-primary/20 tracking-widest uppercase">NAFDAC NO: A7-1733L</span>
+              </div>
               
               <div className="bg-amber-50 border-l-4 border-amber-400 p-6 mb-8 rounded-r-2xl">
                 <p className="text-amber-800 font-bold italic leading-relaxed">
@@ -105,7 +110,7 @@ export const Products: React.FC = () => {
                     "Reduction in inflammation",
                     "Overall plant-based wellness"
                   ].map((text, i) => (
-                    <div key={i} className="flex items-start gap-2">
+                    <div key={`jinja-immune-${i}`} className="flex items-start gap-2">
                       <CheckCircle2 className="w-5 h-5 text-herb-primary flex-shrink-0 mt-0.5" />
                       <span className="text-sm font-medium">{text}</span>
                     </div>
@@ -118,17 +123,109 @@ export const Products: React.FC = () => {
                   onClick={() => jinjaBig && addToCart(jinjaBig, true)}
                   className="bg-herb-primary text-white px-8 py-4 rounded-2xl font-bold hover:bg-herb-primary-hover shadow-lg transition-all"
                 >
-                  Order Big Bottle (₦14,500)
+                  Order Big Bottle (₦{jinjaBig?.price.toLocaleString()})
                 </button>
                 <button 
                   onClick={() => jinjaSmall && addToCart(jinjaSmall, true)}
                   className="border-2 border-herb-primary text-herb-primary px-8 py-4 rounded-2xl font-bold hover:bg-herb-primary/5 transition-all"
                 >
-                  Order Small Bottle (₦8,500)
+                  Order Small Bottle (₦{jinjaSmall?.price.toLocaleString()})
                 </button>
               </div>
             </div>
           </div>
+
+          {/* IRU Soap Section */}
+          <section className="py-20 mb-20 bg-gray-50/50 rounded-[3rem] border border-gray-100">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex flex-col lg:flex-row-reverse items-center gap-16">
+                <motion.div 
+                  initial={{ opacity: 0, x: 30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  className="w-full lg:w-1/2"
+                >
+                  <div className="bg-[#fdfcf0] rounded-[3rem] p-8 md:p-12 relative overflow-hidden group border-2 border-herb-secondary/20">
+                    <img 
+                      src="https://desirebrand.com/images1/iru.png" 
+                      alt="IRU Antiseptic Herbal Soap" 
+                      className="w-full max-w-sm mx-auto transform group-hover:scale-105 transition-transform duration-700 mix-blend-multiply" 
+                    />
+                    <div className="absolute bottom-8 right-8">
+                      <div className="bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-lg border border-white">
+                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Premium Care</p>
+                        <p className="text-herb-primary font-display font-bold">100% Antiseptic</p>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+
+                <div className="w-full lg:w-1/2">
+                  <h2 className="text-3xl md:text-4xl font-display font-bold text-gray-900 mb-2 leading-tight">
+                    IRU Antiseptic — <span className="text-amber-600">Herbal Soap (6 pack)</span>
+                  </h2>
+                  <div className="mb-6">
+                    <span className="inline-block text-xs font-black text-amber-600 bg-amber-50 px-3 py-1 rounded-full border border-amber-200 tracking-widest uppercase">NAFDAC NO: A2-6468</span>
+                  </div>
+                  <p className="text-gray-600 leading-relaxed mb-6 text-lg">
+                    Introducing IRU Antiseptic Herbal Soap (6 pack), a premium natural skincare solution designed to maintain healthy and clean skin. 
+                    Formulated with natural ingredients, it serves as an excellent alternative to chemical-based soaps.
+                  </p>
+
+                  <div className="mb-10 text-[10px] text-gray-400 italic p-4 border border-gray-100 rounded-2xl">
+                    Disclaimer: {HEALTH_DISCLAIMER}
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
+                    {iruBenefits.map((benefit, i) => (
+                      <div key={`iru-benefit-${i}`} className="flex gap-4 p-5 bg-white rounded-2xl border border-gray-100 shadow-sm">
+                        <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center flex-shrink-0">
+                          {benefit.icon}
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-gray-900 mb-1">{benefit.title}</h4>
+                          <p className="text-sm text-gray-500 leading-snug">{benefit.text}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="flex flex-wrap gap-4">
+                    <button 
+                      onClick={() => iruSoap && addToCart(iruSoap, true)}
+                      className="bg-herb-accent text-white px-10 py-4 rounded-2xl font-bold hover:shadow-xl transition-all transform active:scale-95 flex items-center gap-3"
+                    >
+                      <ShoppingCart className="w-5 h-5" /> Buy Pack (₦{iruSoap?.price.toLocaleString()})
+                    </button>
+                    <button 
+                      onClick={() => iruSoapSingle && addToCart(iruSoapSingle, true)}
+                      className="border-2 border-herb-accent text-herb-accent px-10 py-4 rounded-2xl font-bold hover:bg-herb-accent/10 transition-all transform active:scale-95 flex items-center gap-3"
+                    >
+                      <ShoppingCart className="w-5 h-5" /> Buy Single (₦{iruSoapSingle?.price.toLocaleString()})
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section className="mt-16 mb-32">
+            <div className="max-w-4xl mx-auto">
+              <div className="relative">
+                <div className="absolute -left-12 top-0 text-herb-primary opacity-10 pointer-events-none hidden lg:block">
+                  <Leaf className="w-24 h-24 rotate-45" />
+                </div>
+                <h2 className="text-3xl md:text-5xl font-display font-medium text-gray-900 mb-12 tracking-tight">Our Wellness Story</h2>
+                <div className="prose prose-lg md:prose-xl max-w-none text-gray-700 font-serif leading-relaxed">
+                  {JINJA_WELLNESS_STORY.map((paragraph, index) => (
+                    <p key={`wellness-story-${index}`} className="mb-8 last:mb-0">
+                      {paragraph}
+                    </p>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
 
           {/* Jinja Benefits Grid */}
           <div className="bg-herb-bg rounded-[3rem] p-8 md:p-16 border border-herb-secondary/10">
@@ -159,70 +256,11 @@ export const Products: React.FC = () => {
                  { title: "Boosts Immunity", icon: <CheckCircle2 className="w-6 h-6" /> },
                  { title: "No Preservatives", icon: <Sparkles className="w-6 h-6" /> }
                ].map((item, i) => (
-                 <div key={i} className="flex flex-col items-center text-center p-6 bg-white/50 rounded-2xl border border-white">
+                 <div key={`jinja-usp-${i}`} className="flex flex-col items-center text-center p-6 bg-white/50 rounded-2xl border border-white">
                    <div className="text-herb-primary mb-3">{item.icon}</div>
                    <h4 className="text-xs font-black uppercase tracking-tighter text-gray-800">{item.title}</h4>
                  </div>
                ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* IRU Soap Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col lg:flex-row-reverse items-center gap-16">
-            <motion.div 
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="w-full lg:w-1/2"
-            >
-              <div className="bg-[#fdfcf0] rounded-[3rem] p-8 md:p-12 relative overflow-hidden group border-2 border-herb-secondary/20">
-                <img 
-                  src="https://desirebrand.com/images1/iru.png" 
-                  alt="IRU Antiseptic Herbal Soap" 
-                  className="w-full max-w-sm mx-auto transform group-hover:scale-105 transition-transform duration-700 mix-blend-multiply" 
-                />
-                <div className="absolute bottom-8 right-8">
-                  <div className="bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-lg border border-white">
-                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Premium Care</p>
-                    <p className="text-herb-primary font-display font-bold">100% Antiseptic</p>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-
-            <div className="w-full lg:w-1/2">
-              <h2 className="text-3xl md:text-4xl font-display font-bold text-gray-900 mb-6 leading-tight">
-                IRU Antiseptic — <span className="text-amber-600">Herbal Skincare Solution</span>
-              </h2>
-              <p className="text-gray-600 leading-relaxed mb-10 text-lg">
-                Introducing IRU Antiseptic Herbal Soap, a premium natural skincare solution designed to maintain healthy and clean skin. 
-                Formulated with natural ingredients, it serves as an excellent alternative to chemical-based soaps.
-              </p>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
-                {iruBenefits.map((benefit, i) => (
-                  <div key={`iru-benefit-${i}`} className="flex gap-4 p-5 bg-white rounded-2xl border border-gray-100 shadow-sm">
-                    <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center flex-shrink-0">
-                      {benefit.icon}
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-gray-900 mb-1">{benefit.title}</h4>
-                      <p className="text-sm text-gray-500 leading-snug">{benefit.text}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <button 
-                onClick={() => iruSoap && addToCart(iruSoap, true)}
-                className="bg-herb-accent text-white px-10 py-4 rounded-2xl font-bold hover:shadow-xl transition-all transform active:scale-95 flex items-center gap-3"
-              >
-                <ShoppingCart className="w-5 h-5" /> Buy IRU Soap (₦12,500)
-              </button>
             </div>
           </div>
         </div>

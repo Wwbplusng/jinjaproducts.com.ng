@@ -26,19 +26,65 @@ import {
 } from 'lucide-react';
 import { Product, ShippingOption, Benefit, BlogPost, Rank } from './types';
 
-export const PAYSTACK_PUBLIC_KEY = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY;
+export const BANK_DETAILS = {
+  accountName: "Olukorede Fakunmoju",
+  accounts: [
+    { bank: "GTBank", number: "0012991281" },
+    { bank: "Opay", number: "8028418499" }
+  ]
+};
+
+export const HEALTH_DISCLAIMER = "These statements have not been evaluated by the NAFDAC or FDA. This product is not intended to diagnose, treat, cure, or prevent any disease. Results may vary from person to person. Always consult with a healthcare professional before starting any new herbal supplement.";
+
+export const FAQS = [
+  {
+    question: "How long does shipping take?",
+    answer: "Shipping within Lagos takes 24-48 hours. Outside Lagos takes 3-5 business days depending on location."
+  },
+  {
+    question: "Is Jinja Herbal Extract safe for children?",
+    answer: "Yes, our herbal extract is natural and generally safe, but we recommend consulting with a pediatrician for dosages for children under 5."
+  },
+  {
+    question: "Can I use IRU Soap for sensitive skin?",
+    answer: "Absolutely. IRU Soap is formulated with 100% natural organic extracts and is gentle enough for all skin types, including sensitive skin."
+  },
+  {
+    question: "Do you offer wholesale prices?",
+    answer: "Yes, we offer bulk discounts for cartons. Please contact us via WhatsApp for wholesale inquiries."
+  },
+  {
+    question: "What is the recommended dosage for Jinja Herbal Extract?",
+    answer: "Adults are generally advised to take one or two measured doses daily, ideally diluted in water or taken after meals. Always follow the specific instructions on the bottle or consult your healthcare provider."
+  },
+  {
+    question: "How do I become a member or distributor?",
+    answer: "Becoming a distributor is easy! You can join by purchasing any of our registration packages. Our system offers various ranks from Sapphire to Platinum with massive rewards. Please contact us via WhatsApp to receive the registration details and start your wellness business."
+  }
+];
+
+export const TRUST_SIGNALS = [
+  { title: "NAFDAC Approved", description: "Fully registered and certified products.", icon: "ShieldCheck" },
+  { title: "100% Natural", description: "No synthetic chemicals or preservatives.", icon: "Leaf" },
+  { title: "Money Back", description: "7-day satisfaction guarantee.", icon: "RotateCcw" },
+  { title: "Secure Payment", description: "Manual transfer & verified proof.", icon: "Lock" }
+];
+
+export const JINJA_WELLNESS_STORY = [
+  "Jinja Herbal Extract is a carefully formulated herbal wellness supplement designed to support the body naturally through the use of plant-based ingredients traditionally associated with health promotion and overall well-being. In a world where many people rely heavily on synthetic and chemical-based supplements, there is a growing interest in natural alternatives that work gently with the body instead of forcing rapid or artificial responses. Jinja Herbal Extract represents this natural approach by combining herbal ingredients known for their supportive properties in maintaining balance, vitality, and internal wellness.",
+  "This herbal extract serves as a natural alternative to chemical-based supplements, providing a gentle yet effective option for those seeking to improve their overall health. Unlike synthetic solutions that often address symptoms in isolation, Jinja works in harmony with the body's natural systems to restore balance and vitality.",
+  "Unlike many conventional supplements that focus only on suppressing symptoms temporarily, herbal extracts are often valued for their holistic approach. Jinja Herbal Extract is designed to work in harmony with the body’s systems, supporting natural processes such as digestion, circulation, detoxification, and immune function. This approach helps individuals pursue long-term wellness rather than short-term symptom management alone.",
+  "One of the key strengths of Jinja Herbal Extract lies in its carefully selected natural ingredients. While formulations may vary depending on the product line, herbal wellness extracts commonly include ingredients such as ginger, garlic, bitter herbs, moringa, turmeric, cloves, neem, aloe vera, and other plant-based compounds traditionally used in natural medicine. Ginger is widely recognized for its digestive and anti-inflammatory support, while garlic is known for its antioxidant and immune-supporting properties. Moringa contains essential nutrients and antioxidants that may contribute to energy support and general wellness. Turmeric is often used for its natural anti-inflammatory compounds, while aloe vera is traditionally associated with digestive and cleansing support.",
+  "These herbs contain naturally occurring phytochemicals, antioxidants, vitamins, and minerals that may help support the body’s defense systems and overall vitality. Antioxidants play an important role in helping the body combat oxidative stress caused by free radicals, environmental pollutants, stress, and unhealthy lifestyle habits. By helping the body manage oxidative stress, herbal supplements like Jinja Herbal Extract may contribute to improved energy levels, better digestion, and general body balance.",
+  "Jinja Herbal Extract is commonly used by individuals seeking support for detoxification, digestive health, immune wellness, and daily vitality. The herbal blend may help support healthy digestion by promoting regular bowel movement and reducing feelings of bloating or discomfort. Many users also appreciate herbal wellness products for their ability to support natural energy without relying heavily on stimulants or harsh chemical compounds.",
+  "Another important aspect of herbal wellness is consistency and lifestyle support. Jinja Herbal Extract is most effective when combined with healthy habits such as adequate hydration, balanced nutrition, regular physical activity, and proper rest. Herbal supplements are not intended to replace medical treatment or a healthy lifestyle, but they can serve as supportive additions to an overall wellness routine.",
+  "Regarding dosage, herbal extracts should always be used according to the manufacturer’s instructions or professional healthcare guidance. In many liquid herbal extract products, adults are often advised to take measured doses once or twice daily, usually diluted in water or taken after meals. Some users prefer taking herbal extracts in the morning for digestive and energy support, while others include them as part of a daily wellness routine. It is important not to exceed recommended dosage instructions, especially with concentrated herbal formulas.",
+  "One of the reasons many individuals prefer herbal products like Jinja Herbal Extract is the perception that natural wellness solutions are often gentler on the body when used responsibly. Many herbal traditions around the world have used plant-based remedies for centuries to support wellness, vitality, cleansing, and resilience. However, it is also important to recognize that herbal supplements should be used responsibly, especially by pregnant women, nursing mothers, individuals with existing medical conditions, or those currently taking medications. Consulting a qualified healthcare professional before starting any herbal supplement is always recommended.",
+  "Verified benefits associated with herbal ingredients commonly found in wellness extracts include antioxidant support, digestive support, immune support, anti-inflammatory properties, and assistance with maintaining overall body wellness. Scientific research continues to explore the role of herbs and plant compounds in supporting health naturally, particularly in areas such as immune balance, gut health, metabolic support, and oxidative stress reduction.",
+  "As more people seek healthier lifestyles and preventive wellness solutions, products like Jinja Herbal Extract continue to grow in popularity among individuals looking for natural support for their daily health routines. By combining traditional herbal knowledge with modern wellness awareness, Jinja Herbal Extract aims to provide a natural, balanced, and supportive approach to maintaining overall well-being and vitality."
+];
 
 export const PRODUCTS: Product[] = [
-  {
-    id: '1',
-    name: 'Jinja Herbal Extract (Big)',
-    price: 14500,
-    description: "JINJA Herbal Extracts are formulated with powerful bioactive compounds derived from 100% natural herbs, scientifically known for their antiviral properties. These plant-based extracts work by inhibiting viral replication, preventing the virus from multiplying and spreading within the body. Additionally, they help to strengthen the body's immune response, allowing your natural defense system to combat infections more effectively.",
-    image: 'https://desirebrand.com/images1/jinjabig750.png',
-    color: 'bg-[#e8f5e9]',
-    rating: 4.8,
-    reviews: 156
-  },
   {
     id: '2',
     name: 'Jinja Herbal Extract (Small)',
@@ -47,27 +93,41 @@ export const PRODUCTS: Product[] = [
     image: 'https://desirebrand.com/images1/jinjasmall350.png',
     color: 'bg-[#e0f7fa]',
     rating: 4.7,
-    reviews: 215
+    reviews: 215,
+    nafdac: 'A7-1733L'
+  },
+  {
+    id: '1',
+    name: 'Jinja Herbal Extract (Big)',
+    price: 15500,
+    description: "JINJA Herbal Extracts are formulated with powerful bioactive compounds derived from 100% natural herbs, scientifically known for their antiviral properties. These plant-based extracts work by inhibiting viral replication, preventing the virus from multiplying and spreading within the body. Additionally, they help to strengthen the body's immune response, allowing your natural defense system to combat infections more effectively.",
+    image: 'https://desirebrand.com/images1/jinjabig750.png',
+    color: 'bg-[#e8f5e9]',
+    rating: 4.8,
+    reviews: 156,
+    nafdac: 'A7-1733L'
+  },
+  {
+    id: '6',
+    name: 'IRU Antiseptic Herbal Soap',
+    price: 3000,
+    description: "A premium natural skincare solution designed to maintain healthy and clean skin. Formulated with natural ingredients, this herbal soap serves as an excellent alternative to chemical-based soaps that can be harsh on the skin.",
+    image: 'https://desirebrand.com/images1/iru.png',
+    color: 'bg-[#f5f5dc]',
+    rating: 4.9,
+    reviews: 124,
+    nafdac: 'A2-6468'
   },
   {
     id: '3',
-    name: 'IRU Antiseptic Herbal Soap',
+    name: 'IRU Antiseptic Herbal Soap (6 pack)',
     price: 12500,
     description: "A premium natural skincare solution designed to maintain healthy and clean skin. Formulated with natural ingredients, this herbal soap serves as an excellent alternative to chemical-based soaps that can be harsh on the skin.",
     image: 'https://desirebrand.com/images1/iru.png',
     color: 'bg-[#f5f5dc]',
     rating: 4.9,
-    reviews: 92
-  },
-  {
-    id: '4',
-    name: 'Jinja Herbal Extract (Big - 20 bottles)',
-    price: 275000,
-    description: "Boost Your Immunity with JINJA Herbal Extracts – Natural Defense Against Viral Infections and Diseases (Antibiotic, Antiviral, Antifungal, and Ant parasitic Body Refresh!)",
-    image: 'https://desirebrand.com/images1/jinjabigcartoon.png',
-    color: 'bg-[#e8f5e9]',
-    rating: 4.8,
-    reviews: 45
+    reviews: 92,
+    nafdac: 'A2-6468'
   },
   {
     id: '5',
@@ -77,7 +137,19 @@ export const PRODUCTS: Product[] = [
     image: 'https://desirebrand.com/images1/jinjasmallcarton.png',
     color: 'bg-[#e0f7fa]',
     rating: 4.7,
-    reviews: 38
+    reviews: 38,
+    nafdac: 'A7-1733L'
+  },
+  {
+    id: '4',
+    name: 'Jinja Herbal Extract (Big - 20 bottles)',
+    price: 275000,
+    description: "Boost Your Immunity with JINJA Herbal Extracts – Natural Defense Against Viral Infections and Diseases (Antibiotic, Antiviral, Antifungal, and Ant parasitic Body Refresh!)",
+    image: 'https://desirebrand.com/images1/jinjabigcartoon.png',
+    color: 'bg-[#e8f5e9]',
+    rating: 4.8,
+    reviews: 45,
+    nafdac: 'A7-1733L'
   }
 ];
 
@@ -138,7 +210,7 @@ export const BLOG_POSTS: BlogPost[] = [
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {BENEFITS.map((benefit, index) => (
               <motion.div 
-                key={index}
+                key={`blog-benefit-${index}`}
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}

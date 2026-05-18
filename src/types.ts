@@ -10,6 +10,7 @@ export interface Product {
   color: string;
   rating: number;
   reviews: number;
+  nafdac?: string;
 }
 
 export interface CartItem extends Product {

@@ -1,11 +1,80 @@
 import React, { useState } from 'react';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import { Helmet } from 'react-helmet-async';
-import { ShieldCheck, Leaf, FlaskConical, Truck } from 'lucide-react';
-import { PRODUCTS } from './constants';
+import { ShieldCheck, Leaf, FlaskConical, Truck, MessageCircle, Lock, RotateCcw, Zap, Heart, Star, CheckCircle2 } from 'lucide-react';
+import { PRODUCTS, TRUST_SIGNALS, FAQS, HEALTH_DISCLAIMER } from './constants';
 import { ProductCard } from './components/ProductCard';
 import { ProductDetailModal } from './components/ProductDetailModal';
 import { Product } from './types';
+
+const SEO_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Jinja Herbal Extract",
+  "url": "https://jinjaproducts.com.ng/",
+  "description": "Premium natural herbal products for immune defense and skincare. NAFDAC Approved.",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://jinjaproducts.com.ng/?s={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+};
+
+const PRODUCT_LIST_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "itemListElement": PRODUCTS.map((p, i) => ({
+    "@type": "ListItem",
+    "position": i + 1,
+    "url": `https://jinjaproducts.com.ng/products`,
+    "name": p.name
+  }))
+};
+
+function FAQSection() {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  return (
+    <section className="py-24 bg-herb-bg/50">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-5xl font-display font-bold text-herb-primary mb-4 italic">Common Inquiries</h2>
+          <p className="text-gray-500 font-medium">Everything you need to know about our products and services.</p>
+        </div>
+        
+        <div className="space-y-4">
+          {FAQS.map((faq, i) => (
+            <div key={`faq-item-${i}`} className="bg-white rounded-3xl border border-herb-primary/10 overflow-hidden shadow-sm hover:shadow-md transition-all">
+              <button 
+                onClick={() => setOpenIndex(openIndex === i ? null : i)}
+                className="w-full px-8 py-6 flex items-center justify-between font-bold text-gray-800 text-left"
+              >
+                <span className="pr-4">{faq.question}</span>
+                <div className={`p-2 rounded-full bg-herb-bg text-herb-primary transform transition-transform ${openIndex === i ? 'rotate-180' : ''}`}>
+                   <CheckCircle2 className="w-4 h-4" />
+                </div>
+              </button>
+              <AnimatePresence>
+                {openIndex === i && (
+                  <motion.div 
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="px-8 pb-6 text-gray-600 text-sm leading-relaxed border-t border-herb-bg pt-4">
+                      {faq.answer}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
 
 export const Home: React.FC = () => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -13,11 +82,18 @@ export const Home: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>Jinja Herbal Extract | Natural Immune Support & Wellness</title>
-        <meta name="description" content="Boost your immune system naturally with Jinja Herbal Extract. Organic, plant-based remedies for detox, energy, and overall health protection. NAFDAC approved." />
+        <title>Original Jinja Herbal Extract | Official Multistream Products & Health Supplements</title>
+        <meta name="description" content="Buy original Jinja Herbal Extract health supplements by Multistream Ltd. Official distributor for natural detox, immune support & herbal extracts. Fast NAFDAC registered product delivery in Lagos and Nigeria." />
         <link rel="canonical" href="https://jinjaproducts.com.ng/" />
-        <meta property="og:title" content="Jinja Herbal Extract | Nature's Remedy" />
-        <meta property="og:description" content="Discover the power of plant-based healing with Jinja Herbal Extract. 100% natural supplements for vitality and health." />
+        <meta property="og:title" content="Original Jinja Herbal Extract | Official Multistream Store" />
+        <meta property="og:description" content="Discover the best price for original Jinja Herbal Extract. 100% natural supplements for vitality, detox, and immune health." />
+        <meta name="keywords" content="multistream jinja products official, jinja health supplement multistream, jinja herbal extract delivery, jinja supplement distributor lagos, where to buy original jinja drink, original jinja herbal supplement, jinja herbal detox benefits, buy jinja herbal extract, jinja herbal extract price nigeria, original jinja drink buy online" />
+        <script type="application/ld+json">
+          {JSON.stringify(SEO_SCHEMA)}
+        </script>
+        <script type="application/ld+json">
+          {JSON.stringify(PRODUCT_LIST_SCHEMA)}
+        </script>
       </Helmet>
       <section className="relative min-h-[350px] md:min-h-[400px] flex items-center overflow-hidden bg-herb-primary py-8 lg:py-14">
         <div className="absolute right-0 bottom-8 w-full lg:w-[45%] h-[40%] lg:h-[75%] opacity-40 lg:opacity-100 overflow-hidden px-8">
@@ -44,9 +120,9 @@ export const Home: React.FC = () => {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-4xl md:text-6xl font-display font-bold text-white mb-4 leading-tight max-w-3xl"
+            className="text-2xl md:text-4xl font-display font-bold text-white mb-4 leading-tight max-w-3xl"
           >
-            Nature’s Remedy,<br />Pure & Simple
+            Premium Natural <span className="text-herb-secondary font-black">Immune Booster</span> &<br />Advanced <span className="text-herb-secondary font-black">Antiviral Support</span>
           </motion.h1>
           <motion.p 
             initial={{ opacity: 0, x: -20 }}
@@ -81,9 +157,28 @@ export const Home: React.FC = () => {
         </div>
       </section>
 
+      <FAQSection />
+
       {/* Benefits Section */}
       <section id="about" className="bg-white border-y border-gray-100 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-20 text-center">
+            {TRUST_SIGNALS.map((signal, idx) => {
+              const Icon = signal.icon === 'ShieldCheck' ? ShieldCheck : 
+                           signal.icon === 'Leaf' ? Leaf : 
+                           signal.icon === 'RotateCcw' ? RotateCcw : Lock;
+              return (
+                <div key={`trust-signal-${idx}`} className="group">
+                  <div className="w-16 h-16 bg-herb-bg rounded-3xl flex items-center justify-center mx-auto mb-4 border border-herb-primary/5 group-hover:scale-110 transition-transform shadow-sm">
+                    <Icon className="w-8 h-8 text-herb-primary" />
+                  </div>
+                  <h4 className="font-bold text-gray-900 text-sm mb-1">{signal.title}</h4>
+                  <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">{signal.description}</p>
+                </div>
+              );
+            })}
+          </div>
+
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
             <div className="text-center px-4">
               <div className="bg-green-50 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6">
@@ -117,10 +212,33 @@ export const Home: React.FC = () => {
         </div>
       </section>
 
+      <section className="py-20 bg-herb-accent/5 border-t border-herb-accent/10">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <p className="text-[10px] text-herb-primary/60 font-black uppercase tracking-[0.2em] mb-4">Regulatory Compliance</p>
+          <div className="max-w-3xl mx-auto p-8 rounded-[2.5rem] bg-white border border-herb-accent/20 shadow-xl shadow-herb-accent/5">
+            <h3 className="text-xl font-display font-bold text-gray-900 mb-4 flex items-center justify-center gap-3">
+              <ShieldCheck className="w-6 h-6 text-herb-primary" /> Health Disclaimer
+            </h3>
+            <p className="text-xs text-gray-500 leading-relaxed italic">
+              {HEALTH_DISCLAIMER}
+            </p>
+          </div>
+        </div>
+      </section>
+
       <ProductDetailModal 
         product={selectedProduct} 
         onClose={() => setSelectedProduct(null)} 
       />
+
+      {/* SEO Keywords Section */}
+      <section className="bg-herb-bg/30 py-6 border-t border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 text-center">
+          <p className="text-[10px] text-gray-400 font-medium leading-relaxed max-w-4xl mx-auto">
+            multistream jinja products official, jinja health supplement multistream, jinja herbal extract delivery, jinja supplement distributor lagos, where to buy original jinja drink, original jinja herbal supplement, jinja herbal detox benefits, buy jinja herbal extract, jinja herbal extract price nigeria
+          </p>
+        </div>
+      </section>
     </>
   );
 };

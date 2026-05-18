@@ -85,20 +85,21 @@ export const Contact: React.FC = () => {
         <link rel="canonical" href="https://jinjaproducts.com.ng/contact" />
         <meta property="og:title" content="Contact Jinja Herbal Products" />
         <meta property="og:description" content="Get in touch with us for natural health solutions and business opportunities." />
+        <meta name="keywords" content="jinja herbal extract online, jinja products price, multistream jinja herbal, Buy Jinja Herbal Extract, Jinja Herbal Drink Price, Multistream Herbal Products, multistream jinja products official, jinja health supplement multistream, jinja herbal extract delivery, jinja supplement distributor lagos, where to buy original jinja drink, original jinja herbal supplement, jinja herbal detox benefits, buy jinja herbal extract, jinja herbal extract price nigeria" />
       </Helmet>
       {/* Header Section */}
-      <section className="bg-herb-primary py-24 relative overflow-hidden">
+      <section className="bg-herb-primary py-12 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
             <span className="inline-block bg-herb-secondary/20 text-herb-secondary px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-6 border border-herb-secondary/30">
-              Get In Touch
+              Your Wellness Partner
             </span>
-            <h1 className="text-4xl md:text-6xl font-display font-bold text-white mb-6">Contact Us</h1>
-            <p className="text-herb-secondary max-w-2xl mx-auto text-lg">
-              Have questions about our products or interested in becoming a distributor? We're here to help you on your wellness journey.
+            <h1 className="text-2xl md:text-4xl font-display font-bold text-white mb-6 leading-tight">Start the <span className="text-herb-secondary">Conversation</span></h1>
+            <p className="text-herb-secondary max-w-3xl mx-auto text-xl leading-relaxed font-medium">
+              Join thousands who have already taken the first step toward a healthier, more vibrant lifestyle. Whether you have questions about our ingredients or want to explore partnership opportunities, our dedicated team is here to support you every step of the way.
             </p>
           </motion.div>
         </div>
