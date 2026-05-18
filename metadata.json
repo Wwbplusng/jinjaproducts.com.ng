@@ -2,5 +2,5 @@
   "name": "Jinja Herbal Extract",
   "description": "Premium organic herbal extracts for natural immunity and wellness support. NAFDAC approved herbal solutions.",
   "requestFramePermissions": [],
-  "majorCapabilities": []
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
