@@ -1,69 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ShoppingCart, Leaf, ShieldCheck, Truck, FlaskConical, MessageCircle } from 'lucide-react';
+import { ShoppingCart, Leaf, ShieldCheck, Truck, FlaskConical, MessageCircle, Lock } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { SidebarCart } from './SidebarCart';
-import { verifyPayment } from '../services/paymentService';
 
 export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { totalItems, setIsCartOpen, clearCart } = useCart();
   const [isVerifying, setIsVerifying] = useState(false);
 
-  // Handle Payment Callback
+  // Handle Payment Callback - disabled since Paystack integration removed
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const reference = params.get('reference') || params.get('trxref');
-    
-    if (reference) {
-      const checkPayment = async () => {
-        try {
-          setIsVerifying(true);
-          const result = await verifyPayment(reference);
-          if (result.status && result.data.status === 'success') {
-            const orderDataRaw = localStorage.getItem(`order_info_${reference}`);
-            if (orderDataRaw) {
-              try {
-                const orderData = JSON.parse(orderDataRaw);
-                const itemsText = orderData.items.map((item: any) => `- ${item.quantity}x ${item.name}`).join('\n');
-                const whatsappMessage = encodeURIComponent(
-                  `🛍️ *NEW ORDER CONFIRMATION*\n\n` +
-                  `*Customer Details:*\n` +
-                  `👤 Name: ${orderData.name}\n` +
-                  `📞 Phone: ${orderData.phone}\n` +
-                  `📍 Address: ${orderData.address}\n\n` +
-                  `*Order Summary:*\n` +
-                  `${itemsText}\n` +
-                  `🚚 Shipping: ${orderData.shipping}\n` +
-                  `💰 *Total: ₦${orderData.total.toLocaleString()}*\n\n` +
-                  `✅ *Payment Confirmed*\n` +
-                  `💳 Ref: ${reference}\n\n` +
-                  `Please process this order quickly. Thank you!`
-                );
-                
-                // Open WhatsApp in a new tab (this acts as the background send from browser)
-                window.open(`https://wa.me/2348028418499?text=${whatsappMessage}`, '_blank');
-                localStorage.removeItem(`order_info_${reference}`);
-              } catch (e) {
-                console.error("Failed to parse order data for WhatsApp", e);
-              }
-            }
-            
-            alert(`Payment Successful! Reference: ${reference}. We will process your order immediately.`);
-            clearCart();
-          } else {
-            alert('Payment verification failed. Please contact support.');
-          }
-        } catch (error) {
-          console.error(error);
-          alert('Error verifying payment.');
-        } finally {
-          setIsVerifying(false);
-          // Clean up URL
-          window.history.replaceState({}, document.title, window.location.pathname);
-        }
-      };
-      checkPayment();
-    }
+    // Logic removed as per user request to move to manual bank transfers
   }, [clearCart]);
 
   return (
@@ -99,15 +46,27 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
         </div>
       </header>
 
-      {/* Verification Overlay */}
-      {isVerifying && (
-        <div className="fixed inset-0 bg-white/80 backdrop-blur-sm z-[200] flex items-center justify-center">
-          <div className="text-center">
-            <div className="w-12 h-12 border-4 border-herb-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-            <p className="font-bold text-herb-primary">Verifying Payment...</p>
+      {/* Trust Bar */}
+      <div className="bg-herb-primary/5 border-b border-herb-primary/10 py-2 hidden sm:block">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-center gap-12 text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500">
+          <div className="flex items-center gap-2">
+            <ShieldCheck className="w-3.5 h-3.5 text-herb-primary" />
+            <span>NAFDAC Certified</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Lock className="w-3.5 h-3.5 text-herb-primary" />
+            <span>Secure Payments</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Truck className="w-3.5 h-3.5 text-herb-primary" />
+            <span>Express Delivery</span>
+          </div>
+          <div className="flex items-center gap-2">
+             <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+             <span>Verified Seller</span>
           </div>
         </div>
-      )}
+      </div>
 
       <main>
         {children}
@@ -124,20 +83,38 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
               <p className="text-gray-400 text-sm mb-6 leading-relaxed">
                 Bringing nature’s wisdom to your daily wellness routine since 2020. We believe in the power of plants to heal and restore.
               </p>
-              <p className="text-gray-500 text-[10px] leading-tight italic uppercase tracking-wider">
-                *These statements have not been evaluated by the FDA. This product is not intended to diagnose, treat, cure, or prevent any disease.
-              </p>
+              <div className="flex flex-wrap gap-4 items-center border-t border-white/10 pt-6">
+                <div className="flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-lg border border-white/5">
+                   <Lock className="w-3.5 h-3.5 text-herb-secondary" />
+                   <span className="text-[10px] font-bold text-white uppercase tracking-widest">Secure Payments</span>
+                </div>
+                <div className="flex gap-4 items-center bg-white/5 px-4 py-2 rounded-xl">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" className="h-4 brightness-110" alt="Visa" />
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" className="h-5 brightness-110" alt="Mastercard" />
+                  <img src="https://vignette.wikia.nocookie.net/logopedia/images/4/4c/Verve_2016.png" className="h-3.5 brightness-110" alt="Verve" />
+                </div>
+              </div>
             </div>
             
             <div>
-              <h4 className="text-white font-bold mb-6">Quick Links</h4>
+              <h4 className="text-white font-bold mb-6">Security & Trust</h4>
               <ul className="space-y-4 text-gray-400 text-sm">
-                <li><Link to="/" className="hover:text-herb-accent transition-colors">Home</Link></li>
-                <li><Link to="/products" className="hover:text-herb-accent transition-colors">Products</Link></li>
-                <li><Link to="/join-us" className="hover:text-herb-accent transition-colors">Join Us</Link></li>
-                <li><Link to="/blog" className="hover:text-herb-accent transition-colors">Blog</Link></li>
-                <li><Link to="/contact" className="hover:text-herb-accent transition-colors">Contact Us</Link></li>
+                <li className="flex items-center gap-3">
+                  <ShieldCheck className="w-5 h-5 text-herb-secondary" />
+                  <span>NAFDAC Certified Products</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <Lock className="w-5 h-5 text-herb-secondary" />
+                  <span>100% Secure Bank Verification</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <Truck className="w-5 h-5 text-herb-secondary" />
+                  <span>Verified Tracking & Logistics</span>
+                </li>
               </ul>
+              <p className="text-gray-500 text-[10px] leading-tight italic uppercase tracking-wider mt-8 border-t border-white/5 pt-4">
+                *These statements have not been evaluated by the NAFDAC or FDA. This product is not intended to diagnose, treat, cure, or prevent any disease. Always consult with a healthcare professional before starting any new herbal supplement.
+              </p>
             </div>
 
             <div>

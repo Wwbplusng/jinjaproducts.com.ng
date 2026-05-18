@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, ShieldCheck, Star, Heart, ShoppingCart, CheckCircle2, Truck } from 'lucide-react';
+import { X, ShieldCheck, Star, Heart, ShoppingCart, CheckCircle2, Truck, Lock, Plus, Minus, ArrowRight } from 'lucide-react';
 import { Product } from '../types';
 import { useCart } from '../context/CartContext';
-import { SHIPPING_OPTIONS, PAYSTACK_PUBLIC_KEY, PRODUCTS } from '../constants';
+import { SHIPPING_OPTIONS, BANK_DETAILS, PRODUCTS, HEALTH_DISCLAIMER } from '../constants';
 import { initializePayment } from '../services/paymentService';
 
 interface ProductDetailModalProps {
@@ -22,7 +22,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
     email: '',
     phone: '',
     address: '',
-    shipping: 'mainland',
+    shipping: '',
     paymentMethod: 'online'
   });
 
@@ -47,14 +47,10 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
     if (!trimmedEmail || !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(trimmedEmail)) errors.email = 'Valid email is required';
     if (!trimmedPhone) errors.phone = 'Phone number is required';
     if (!trimmedAddress) errors.address = 'Address is required';
+    if (!checkoutData.shipping) errors.shipping = 'Please select a shipping area';
     
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors);
-      return;
-    }
-
-    if (!PAYSTACK_PUBLIC_KEY || PAYSTACK_PUBLIC_KEY === 'undefined' || PAYSTACK_PUBLIC_KEY.includes('YOUR_')) {
-      alert("Error: Paystack Public Key is missing or invalid. Please set the VITE_PAYSTACK_PUBLIC_KEY environment variable in your host settings (e.g. Netlify).");
       return;
     }
 
@@ -77,40 +73,40 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
       );
       
       const reference = response.data.reference;
-      const nameParts = trimmedName.split(' ');
-      const firstname = nameParts[0] || trimmedName;
-      const lastname = nameParts.slice(1).join(' ') || "";
-
-      const paystackConfig: any = {
-        key: PAYSTACK_PUBLIC_KEY,
-        email: trimmedEmail,
-        amount: Math.round(finalTotal * 100),
-        firstname,
-        lastname,
-        ref: reference,
-        metadata: {
-          custom_fields: [
-            { display_name: "Customer Name", variable_name: "customer_name", value: trimmedName },
-            { display_name: "Email Address", variable_name: "customer_email", value: trimmedEmail },
-            { display_name: "Phone Number", variable_name: "customer_phone", value: trimmedPhone },
-            { display_name: "Delivery Address", variable_name: "customer_address", value: trimmedAddress }
-          ]
-        },
-        onClose: () => setIsSubmitting(false),
-        callback: (resp: any) => {
-          window.location.href = `${window.location.pathname}?reference=${resp.reference}`;
-        }
-      };
-
-      // Use access_code if returned by backend, otherwise it uses the params above
-      if (response.data.access_code) {
-        paystackConfig.access_code = response.data.access_code;
-      }
-
-      const handler = (window as any).PaystackPop.setup(paystackConfig);
-      handler.openIframe();
+      
+      const itemsText = cart.map(item => `- ${item.quantity}x ${item.name}`).join('\n');
+      const whatsappMessage = encodeURIComponent(
+        `🛍️ *NEW ORDER (UNPAID/PENDING TRANSFER)*\n\n` +
+        `*Customer Details:*\n` +
+        `👤 Name: ${trimmedName}\n` +
+        `📞 Phone: ${trimmedPhone}\n` +
+        `📍 Address: ${trimmedAddress}\n\n` +
+        `*Order Summary:*\n` +
+        `${itemsText}\n` +
+        `🚚 Shipping: ${(SHIPPING_OPTIONS as any)[checkoutData.shipping].label}\n` +
+        `💰 *Total: ₦${finalTotal.toLocaleString()}*\n\n` +
+        `💳 Ref: ${reference}\n\n` +
+        `⚠️ *Action Required:* Please send proof of payment to this number if you have just transferred.`
+      );
+      
+      // Open WhatsApp
+      window.open(`https://wa.me/2348028418499?text=${whatsappMessage}`, '_blank');
+      
+      alert(`Order Initiated! Reference: ${reference}. Please complete your transfer to the account details shown and send proof of payment on WhatsApp.`);
+      onClose();
+      setCheckoutData({
+        name: '',
+        email: '',
+        phone: '',
+        address: '',
+        shipping: '',
+        paymentMethod: 'online'
+      });
+      setDetailViewStep('details');
+      setFormErrors({});
     } catch (error: any) {
-      alert("Payment failed: " + error.message);
+      alert("Order failed: " + error.message);
+    } finally {
       setIsSubmitting(false);
     }
   };
@@ -171,7 +167,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
                   <div className="flex items-center gap-0.5 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-100">
                     {[...Array(5)].map((_, i) => (
                       <Star 
-                        key={i} 
+                        key={`modal-star-${i}`} 
                         className={`w-3 h-3 ${i < Math.floor(product.rating) ? 'text-herb-accent fill-herb-accent' : 'text-gray-200'}`} 
                       />
                     ))}
@@ -183,6 +179,11 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
                 <div className="flex items-start justify-between mb-2">
                   <div>
                     <h2 className="text-2xl md:text-3xl font-display font-bold text-gray-900 leading-tight mb-1">{product.name}</h2>
+                    {product.nafdac && (
+                      <div className="mb-2">
+                        <span className="text-[10px] font-bold text-herb-primary bg-herb-primary/5 px-2 py-0.5 rounded border border-herb-primary/10 uppercase tracking-wider">NAFDAC NO: {product.nafdac}</span>
+                      </div>
+                    )}
                     <div className="text-xl font-display font-bold text-herb-primary">₦{product.price.toLocaleString()}</div>
                   </div>
                   <button 
@@ -216,7 +217,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
                       onClick={() => setDetailViewStep('checkout')}
                       className="w-full bg-herb-accent text-white py-4 rounded-xl font-bold text-base hover:shadow-lg transition-all transform active:scale-[0.98] flex items-center justify-center gap-2"
                     >
-                      Proceed to Checkout (₦{totalPrice.toLocaleString()}) <span className="text-lg">→</span>
+                      Pay ₦{totalPrice.toLocaleString()} Now and Checkout <span className="text-lg">→</span>
                     </button>
                   )}
                   
@@ -249,8 +250,8 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
                     <ShoppingCart className="w-3 h-3" /> Cart Summary
                   </p>
                   <div className="space-y-4 max-h-56 overflow-y-auto mb-4 pr-1">
-                    {cart.map((item) => (
-                      <div key={`modal-checkout-${item.id}`} className="flex justify-between items-center text-sm border-b border-gray-100 pb-3 last:border-0 last:pb-0">
+                    {cart.map((item, idx) => (
+                      <div key={`modal-checkout-item-${item.id}-${idx}`} className="flex justify-between items-center text-sm border-b border-gray-100 pb-3 last:border-0 last:pb-0">
                         <div className="flex gap-3 items-center">
                           <span className="text-gray-700 font-medium truncate max-w-[120px]">{item.quantity}x {item.name}</span>
                         </div>
@@ -261,15 +262,76 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
                     ))}
                   </div>
                   <div className="flex items-center justify-between pt-3 border-t-2 border-dashed border-gray-200">
-                    <div>
-                      <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-0.5">Grand Total</p>
-                      <p className="text-2xl font-display font-bold text-herb-primary">₦{totalPrice.toLocaleString()}</p>
+                    <div className="w-full space-y-1">
+                      <div className="flex justify-between text-xs text-gray-500">
+                        <span>Subtotal:</span>
+                        <span>₦{totalPrice.toLocaleString()}</span>
+                      </div>
+                      <div className="flex justify-between text-xs text-gray-500">
+                        <span>Shipping {checkoutData.shipping ? `(${SHIPPING_OPTIONS[checkoutData.shipping].label})` : ''}:</span>
+                        <span>{!checkoutData.shipping ? 'Pending selection' : checkoutData.shipping === 'pod' ? 'Pay at destination' : `₦${(SHIPPING_OPTIONS as any)[checkoutData.shipping].fee.toLocaleString()}`}</span>
+                      </div>
+                      <div className="flex justify-between items-end pt-2">
+                        <div>
+                          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-0.5">Grand Total</p>
+                          <p className="text-2xl font-display font-bold text-herb-primary">₦{(totalPrice + (checkoutData.shipping ? (SHIPPING_OPTIONS as any)[checkoutData.shipping].fee : 0)).toLocaleString()}</p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
 
                 <form onSubmit={handleLightboxCheckout} className="space-y-4">
-                   <div className="space-y-4">
+                    <div>
+                      <label className="block text-xs font-black text-herb-primary uppercase mb-2 ml-1 flex items-center gap-2">
+                        <Lock className="w-3 h-3" /> Secure Payment (Direct Transfer)
+                      </label>
+                      <div className="p-4 rounded-3xl bg-herb-primary text-white shadow-xl relative overflow-hidden mb-6">
+                        <div className="relative z-10">
+                          <label className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.2em] mb-3 text-white/80">
+                            <Lock className="w-3 h-3" /> Official Payment Channel
+                          </label>
+                          
+                          <div className="space-y-4">
+                            <div className="border-b border-white/20 pb-3">
+                               <p className="text-[10px] font-black text-herb-accent uppercase tracking-[0.2em] mb-1">Account Name</p>
+                               <p className="text-xl font-display font-black tracking-tight leading-tight text-white">{BANK_DETAILS.accountName}</p>
+                            </div>
+                            
+                            <div className="grid grid-cols-1 gap-3">
+                              {BANK_DETAILS.accounts.map((acc, i) => (
+                                <div key={`modal-payment-bank-${acc.number}-${i}`} className="p-4 bg-white/15 backdrop-blur-md rounded-2xl border border-white/30 flex justify-between items-center group/bank hover:bg-white/20 transition-all shadow-lg">
+                                  <div>
+                                    <div className="inline-block px-2.5 py-1 bg-herb-accent text-herb-primary text-[10px] font-black rounded-lg uppercase tracking-widest mb-2 shadow-sm border border-white/20">
+                                      {acc.bank}
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      <p className="text-2xl font-black tracking-[0.1em] font-mono select-all text-white">{acc.number}</p>
+                                    </div>
+                                  </div>
+                                  <div className="w-10 h-10 bg-herb-accent rounded-xl flex items-center justify-center shadow-xl transform group-hover/bank:rotate-12 transition-transform">
+                                    <ShieldCheck className="w-6 h-6 text-herb-primary" />
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                          
+                          <div className="mt-4 flex items-center justify-between border-t border-white/10 pt-3">
+                            <p className="text-[8px] font-medium text-white/50 italic">* Pay only to official accounts</p>
+                            <div className="flex gap-3 items-center">
+                              <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" className="h-2.5 brightness-0 invert" alt="Visa" />
+                              <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" className="h-4 brightness-0 invert" alt="Mastercard" />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <p className="text-[9px] text-gray-400 italic text-center mb-6 px-4">
+                        * {HEALTH_DISCLAIMER}
+                      </p>
+                    </div>
+
+                    <div className="space-y-4">
                     <div>
                       <label className="block text-[10px] font-bold text-gray-500 uppercase mb-1.5 ml-1">Full Name</label>
                       <input 
@@ -308,12 +370,14 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
                       <select 
                         value={checkoutData.shipping}
                         onChange={(e) => setCheckoutData({...checkoutData, shipping: e.target.value})}
-                        className="w-full bg-gray-50 border border-gray-200 rounded-xl px-5 py-4 text-sm focus:ring-2 focus:ring-herb-primary outline-none"
+                        className={`w-full bg-gray-50 border ${formErrors.shipping ? 'border-red-400' : 'border-gray-200'} rounded-xl px-5 py-4 text-sm focus:ring-2 focus:ring-herb-primary outline-none transition-all`}
                       >
-                        {Object.entries(SHIPPING_OPTIONS).map(([key, option]) => (
-                          <option key={key} value={key}>{option.label} — ₦{option.fee.toLocaleString()}</option>
+                        <option value="" disabled>Select Shipping Area</option>
+                        {Object.entries(SHIPPING_OPTIONS).map(([sKey, option]) => (
+                          <option key={`modal-shipping-${sKey}`} value={sKey}>{option.label} — ₦{option.fee.toLocaleString()}</option>
                         ))}
                       </select>
+                      {formErrors.shipping && <p className="text-[10px] text-red-500 mt-1 ml-1">{formErrors.shipping}</p>}
                     </div>
                     {checkoutData.shipping === 'pod' && (
                       <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl">
@@ -329,7 +393,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
                     disabled={isSubmitting}
                     className="w-full bg-herb-primary text-white py-5 rounded-2xl font-bold text-lg hover:bg-herb-primary-hover shadow-xl transition-all transform active:scale-95 flex items-center justify-center gap-3 disabled:opacity-70"
                   >
-                    {isSubmitting ? 'Processing...' : <><CheckCircle2 className="w-6 h-6" /> Complete Order</>}
+                    {isSubmitting ? 'Confirming...' : <><CheckCircle2 className="w-6 h-6" /> Pay ₦{(totalPrice + (checkoutData.shipping ? (SHIPPING_OPTIONS as any)[checkoutData.shipping].fee : 0)).toLocaleString()} Now and Checkout</>}
                   </button>
                 </form>
               </motion.div>

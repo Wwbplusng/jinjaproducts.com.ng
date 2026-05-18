@@ -42,13 +42,18 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onViewDetails
         <div className="flex items-center gap-1 mb-3">
           {[...Array(5)].map((_, i) => (
             <Star 
-              key={i} 
+              key={`star-card-${i}`} 
               className={`w-4 h-4 ${i < Math.floor(product.rating) ? 'text-herb-accent fill-herb-accent' : 'text-gray-300'}`} 
             />
           ))}
           <span className="text-xs text-gray-500 ml-1 font-medium">({product.reviews} reviews)</span>
         </div>
         <h3 className="text-xl font-display font-bold mb-2">{product.name}</h3>
+        {product.nafdac && (
+          <div className="mb-3">
+             <span className="text-[10px] font-bold text-herb-primary bg-herb-primary/5 px-2 py-0.5 rounded border border-herb-primary/10 uppercase tracking-wider">NAFDAC NO: {product.nafdac}</span>
+          </div>
+        )}
         <p className="text-gray-600 text-sm mb-6 flex-1 italic line-clamp-2">{product.description}</p>
         
         <div className="flex items-center justify-between mb-6">
