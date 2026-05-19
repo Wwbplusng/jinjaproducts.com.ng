@@ -1,35 +1,56 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { ShoppingCart, Leaf, ShieldCheck, Truck, FlaskConical, MessageCircle, Lock } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
+import { ShoppingCart, Leaf, ShieldCheck, Truck, FlaskConical, MessageCircle, Lock, Menu, X, ChevronRight, Phone, Mail } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { SidebarCart } from './SidebarCart';
+import { motion, AnimatePresence } from 'motion/react';
 
 export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { totalItems, setIsCartOpen, clearCart } = useCart();
-  const [isVerifying, setIsVerifying] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation();
 
-  // Handle Payment Callback - disabled since Paystack integration removed
+  // Close mobile menu on route change
   useEffect(() => {
-    // Logic removed as per user request to move to manual bank transfers
-  }, [clearCart]);
+    setIsMobileMenuOpen(false);
+  }, [location]);
+
+  const navLinks = [
+    { name: 'Home', path: '/' },
+    { name: 'Products', path: '/products' },
+    { name: 'Join Us', path: '/join-us' },
+    { name: 'Blog', path: '/blog' },
+    { name: 'Contact Us', path: '/contact' },
+  ];
 
   return (
     <div className="min-h-screen bg-herb-bg font-sans text-gray-900">
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-white shadow-sm">
+      <header className="sticky top-0 z-50 bg-white shadow-sm border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-          <div className="flex items-center">
+          <div className="flex items-center gap-4">
+            <button 
+              onClick={() => setIsMobileMenuOpen(true)}
+              className="md:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors text-gray-600"
+              aria-label="Open menu"
+            >
+              <Menu className="w-6 h-6" />
+            </button>
             <Link to="/">
               <img src="http://desirebrand.com/images1/jinjalogo.png" alt="Jinja Logo" className="h-10 md:h-12 w-auto" />
             </Link>
           </div>
           
           <nav className="hidden md:flex items-center gap-8">
-            <Link to="/" className="font-medium text-gray-600 hover:text-herb-primary transition-colors">Home</Link>
-            <Link to="/products" className="font-medium text-gray-600 hover:text-herb-primary transition-colors">Products</Link>
-            <Link to="/join-us" className="font-medium text-gray-600 hover:text-herb-primary transition-colors">Join Us</Link>
-            <Link to="/blog" className="font-medium text-gray-600 hover:text-herb-primary transition-colors">Blog</Link>
-            <Link to="/contact" className="font-medium text-gray-600 hover:text-herb-primary transition-colors">Contact Us</Link>
+            {navLinks.map((link) => (
+              <Link 
+                key={link.path} 
+                to={link.path} 
+                className={`font-medium transition-colors ${location.pathname === link.path ? 'text-herb-primary' : 'text-gray-600 hover:text-herb-primary'}`}
+              >
+                {link.name}
+              </Link>
+            ))}
           </nav>
 
           <button 
@@ -39,12 +60,79 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
           >
             <ShoppingCart className="w-5 h-5" />
             <span className="hidden sm:inline">Cart</span>
-            <span className="bg-herb-primary text-white text-xs px-2 py-0.5 rounded-full group-hover:bg-white group-hover:text-herb-primary transition-colors">
+            <span className="bg-herb-primary text-white text-xs px-2 py-0.5 rounded-full">
               {totalItems}
             </span>
           </button>
         </div>
       </header>
+
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <>
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] md:hidden"
+            />
+            <motion.div 
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="fixed top-0 left-0 bottom-0 w-[80%] max-sm:w-[85%] max-w-sm bg-white z-[70] md:hidden shadow-2xl flex flex-col"
+            >
+              <div className="p-6 flex items-center justify-between border-b border-gray-100">
+                <img src="http://desirebrand.com/images1/jinjalogo.png" alt="Jinja Logo" className="h-8 w-auto" />
+                <button 
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                >
+                  <X className="w-6 h-6 text-gray-500" />
+                </button>
+              </div>
+
+              <div className="flex-1 overflow-y-auto py-8 px-6">
+                <div className="space-y-4">
+                  {navLinks.map((link) => (
+                    <Link 
+                      key={link.path} 
+                      to={link.path} 
+                      className={`flex items-center justify-between p-4 rounded-2xl font-bold transition-all ${
+                        location.pathname === link.path 
+                          ? 'bg-herb-primary text-white shadow-lg shadow-herb-primary/20 scale-[1.02]' 
+                          : 'text-gray-600 hover:bg-gray-50 active:scale-95'
+                      }`}
+                    >
+                      {link.name}
+                      <ChevronRight className={`w-5 h-5 ${location.pathname === link.path ? 'text-white/70' : 'text-gray-300'}`} />
+                    </Link>
+                  ))}
+                </div>
+
+                <div className="mt-12 p-6 bg-herb-bg rounded-3xl border border-herb-secondary/10">
+                  <h4 className="text-[10px] font-black text-herb-primary uppercase tracking-[0.2em] mb-4">Support & Inquiry</h4>
+                  <div className="space-y-4 text-sm font-bold text-gray-500">
+                    <a href="tel:08028418499" className="flex items-center gap-3 hover:text-herb-primary transition-colors">
+                      <Phone className="w-4 h-4" /> 0802 841 8499
+                    </a>
+                    <a href="mailto:newrequest@jinjaproducts.com.ng" className="flex items-center gap-3 hover:text-herb-primary transition-colors">
+                      <Mail className="w-4 h-4" /> Email Us
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-6 border-t border-gray-100 text-center">
+                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Official Jinja Herbal Portal</p>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
 
       {/* Trust Bar */}
       <div className="bg-herb-primary/5 border-b border-herb-primary/10 py-2 hidden sm:block">
@@ -97,24 +185,17 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
             </div>
             
             <div>
-              <h4 className="text-white font-bold mb-6">Security & Trust</h4>
+              <h4 className="text-white font-bold mb-6">Quick Navigation</h4>
               <ul className="space-y-4 text-gray-400 text-sm">
-                <li className="flex items-center gap-3">
-                  <ShieldCheck className="w-5 h-5 text-herb-secondary" />
-                  <span>NAFDAC Certified Products</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <Lock className="w-5 h-5 text-herb-secondary" />
-                  <span>100% Secure Bank Verification</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <Truck className="w-5 h-5 text-herb-secondary" />
-                  <span>Verified Tracking & Logistics</span>
-                </li>
+                {navLinks.map((link) => (
+                  <li key={`footer-nav-${link.path}`}>
+                    <Link to={link.path} className="hover:text-herb-secondary transition-colors flex items-center gap-2">
+                      <ChevronRight className="w-3 h-3 text-herb-secondary" />
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
               </ul>
-              <p className="text-gray-500 text-[10px] leading-tight italic uppercase tracking-wider mt-8 border-t border-white/5 pt-4">
-                *These statements have not been evaluated by the NAFDAC or FDA. This product is not intended to diagnose, treat, cure, or prevent any disease. Always consult with a healthcare professional before starting any new herbal supplement.
-              </p>
             </div>
 
             <div>
@@ -149,6 +230,24 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                   className="bg-gray-800 border-none rounded-lg px-4 py-2 text-sm text-white focus:ring-2 focus:ring-herb-accent w-full"
                 />
                 <button className="bg-herb-accent text-gray-900 px-4 py-2 rounded-lg font-bold text-sm hover:brightness-110">Subscribe</button>
+              </div>
+
+              <div className="mt-10 border-t border-white/5 pt-8">
+                <h4 className="text-white font-bold mb-6">Security & Trust</h4>
+                <ul className="grid grid-cols-1 gap-4 text-gray-400 text-sm">
+                  <li className="flex items-center gap-3">
+                    <ShieldCheck className="w-5 h-5 text-herb-secondary" />
+                    <span>NAFDAC Certified Products</span>
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <Lock className="w-5 h-5 text-herb-secondary" />
+                    <span>100% Secure Bank Verification</span>
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <Truck className="w-5 h-5 text-herb-secondary" />
+                    <span>Verified Tracking & Logistics</span>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
